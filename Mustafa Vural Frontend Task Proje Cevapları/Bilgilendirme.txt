@@ -1,0 +1,2 @@
+Merhaba bu frontend task'ta kullanmış olduğum resimler google üzerinden alırken ikonları fontawoseme üzerinden kullandım.Tek bir html üzerinden kontrol ettim.Html kısmının 
+içinde tailwind ve js kodlarım mevcut iken.Ufak tefek css ve js dosyamı harici kullandım.İyi Çalşmalar dilerim.

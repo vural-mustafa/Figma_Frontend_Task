@@ -1,0 +1,283 @@
+.<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lizyum Frontend Task</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .page { display: none; }
+    .page.active { display: block;}
+    .popup { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.4); justify-content: center; align-items: center; z-index: 50; }
+    .popup.active { display: flex; }
+    .tab-active { border-b-2 border-blue-500 font-semibold bg-white rounded-t-xl px-4 py-2; }
+    @media (min-width: 768px) {
+      .company-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .popup-content { width: 400px; }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-blue-100 to-white min-h-screen">
+  <!-- Anasayfa -->
+  <div id="anasayfa" class="page active p-4">
+    <header class="flex justify-between items-center mb-4">
+      <div>
+        <h1 class="text-2xl font-bold">Merhaba!</h1>
+        <p class="text-sm text-gray-600">Lizyum’a Hoşgeldiniz</p>
+      </div>
+      <img src="resimler/user.png" alt="User" class="w-10 h-10 rounded-full">
+    </header>
+    <input type="text" id="aramaInput" placeholder="Aramak istediğiniz Hizmeti Yazın" class="w-full p-3 mb-4 rounded-2xl border border-gray-300" onkeypress="checkEnter(event)">
+    <ul id="aramaSonuc" class="bg-white shadow rounded-xl mt-2 hidden p-2">
+      <li onclick="openAramaListe('Temizlik Şirketi')" class="py-2 border-b cursor-pointer hover:bg-gray-100">Temizlik Şirketi</li>
+      <li onclick="openAramaListe('Tadilat Servisi')" class="py-2 cursor-pointer hover:bg-gray-100">Tadilat Servisi</li>
+    </ul>
+  </div>
+
+   <!-- Arama Listeleme -->
+   <div id="aramaListe" class="page">
+    <button onclick="showPage('anasayfa')" class="text-blue-500 mb-4 flex items-center gap-1"><span>←</span> Geri Dön</button>
+    <h2 class="text-xl font-bold mb-4">Arama Sonuçları: <span id="arananKelime"></span></h2>
+    <div class="grid gap-4 company-grid">
+        <div onclick="openCompanyDetail('Temizlik Şirketi', 'En iyi temizlik hizmeti', ['Harika hizmet!', 'Çok temiz çalışıyorlar.'], ['Hijyen Sertifikası', 'Deneyimli Ekip'])" class="bg-white p-4 rounded-xl shadow cursor-pointer hover:shadow-lg transition">
+        <h3 class="font-bold mb-2">Temizlik Şirketi</h3>
+        <p class="text-gray-500 text-sm"><img src="resimler/temizlik.jpg" width="80px">4.7 ⭐ | 120 yorum | 200₺’den başlayan fiyatlar</p>
+    </div>
+      <div onclick="openCompanyDetail('Hijyen Servisi', 'Hijyen garantili hizmetler', ['Çok memnun kaldım.', 'Hijyenik ve hızlı.'], ['Temizlik Rozeti', 'Güven Sertifikası'])" class="bg-white p-4 rounded-xl shadow cursor-pointer hover:shadow-lg transition">
+        <h3 class="font-bold mb-2">Hijyen Servisi</h3>
+        <p class="text-gray-500 text-sm"><img src="resimler/hijyen.jpg" width="80px">4.5 ⭐ | 90 yorum | 180₺’den başlayan fiyatlar</p>
+      </div>
+    </div>
+  </div>
+    <div class="flex justify-between items-center mb-2">
+      <h2 class="text-xl font-semibold"># Senin İçin</h2>
+      <button onclick="toggleKategoriler()" id="toggleButton" class="text-blue-500 text-sm">Tümünü Gör</button>
+    </div>
+    <div id="kategoriler" class="grid grid-cols-4 gap-2 mb-4 max-h-28 overflow-hidden transition-all duration-500">
+      <button class="bg-gray-100 py-2 rounded-xl text-xs">Lorem</button>
+      <button class="bg-gray-100 py-2 rounded-xl text-xs">Ipsum</button>
+      <button class="bg-gray-100 py-2 rounded-xl text-xs">Dolor</button>
+      <button class="bg-gray-100 py-2 rounded-xl text-xs">Sit</button>
+      <button class="bg-gray-100 py-2 rounded-xl text-xs">Amet</button>
+      <button class="bg-gray-100 py-2 rounded-xl text-xs">Consectetur</button>
+      <button class="bg-gray-100 py-2 rounded-xl text-xs">Adipiscing</button>
+      <button class="bg-gray-100 py-2 rounded-xl text-xs">Elit</button>
+      <button class="bg-gray-100 py-2 rounded-xl text-xs">Vestibulum</button>
+      <button class="bg-gray-100 py-2 rounded-xl text-xs">Porttitor</button>
+      <button class="bg-gray-100 py-2 rounded-xl text-xs">Mauris</button>
+      <button class="bg-gray-100 py-2 rounded-xl text-xs">Felis</button>
+    </div>
+
+    <h2 class="text-xl font-semibold mb-2"># Öne Çıkanlar</h2>
+    <div class="flex gap-4 overflow-x-scroll mb-20">
+      <div onclick="goToSirketDetay()" class="min-w-[200px] bg-white rounded-xl shadow cursor-pointer transform transition-transform hover:scale-105 hover:shadow-xl">
+        <img src="resimler/unnamed.jpg" class="rounded-t-xl">
+        <p class="p-2 text-sm">200 TL’den başlayan fiyatlarla <br><strong>Tamirat Servisi</strong></p>
+      </div>
+      <div onclick="goToSirketDetay()" class="min-w-[200px] bg-white rounded-xl shadow cursor-pointer transform transition-transform hover:scale-105 hover:shadow-xl">
+        <img src="resimler/mutfak.jpg" class="rounded-t-xl">
+        <p class="p-2 text-sm">200 TL’den başlayan fiyatlarla <br><strong>Mutfak Servisi</strong></p>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p style="color: blue;">#</p><p>Yakındakiler</p>
+  </div>
+
+  <!-- Şirket Detay (dinamik içerik ile) -->
+  <div id="sirketDetay" class="page p-4">
+    <button onclick="showPage('aramaListe')" class="text-blue-500 mb-4 flex items-center gap-1"><span>←</span> Geri Dön</button>
+    <h1 id="companyName" class="text-2xl font-bold mb-4">Şirket Adı</h1>
+    <p id="companyDesc" class="text-gray-600 mb-4">Şirket açıklaması burada yer alacak.</p>
+    <div class="flex justify-around mb-4 bg-gray-200 rounded-xl p-2">
+        <button id="tabBilgi" onclick="showTab('bilgi')" class="tab-button tab-active">Şirket Bilgisi</button>
+        <button id="tabYorumlar" onclick="showTab('yorumlar')" class="tab-button">Yorumlar</button>
+        <button id="tabRozet" onclick="showTab('rozet')" class="tab-button">Rozet Kataloğu</button>
+      </div>
+    <div id="detayIcerik" class="tab-content">
+      <p class="text-gray-600 text-sm mb-4">Burada dinamik olarak seçilen şirketin detay bilgileri gösterilecek.</p>
+    </div>
+    <div id="yorumlarIcerik" class="tab-content hidden">
+        <ul id="yorumList" class="list-disc pl-4 text-gray-600 text-sm">
+            <li>Harika hizmet! ⭐⭐⭐⭐⭐</li>
+            <li>Çok memnunum. ⭐⭐⭐⭐</li>
+        </ul>
+    </div>
+    <div id="rozetIcerik" class="tab-content hidden">
+        <ul id="rozetList" class="list-disc pl-4 text-gray-600 text-sm">
+            <li>Hijyen Sertifikası</li>
+            <li>Profesyonellik Rozeti</li>
+        </ul>
+    </div>
+  </div>
+  <!-- Tebrikler Popup -->
+  <div id="popupTebrikler" class="popup">
+    <div class="bg-white p-6 rounded-2xl shadow-xl text-center">
+      <img src="https://via.placeholder.com/80" class="mx-auto mb-4" alt="Tebrikler">
+      <h2 class="text-xl font-bold mb-2">Tebrikler!</h2>
+      <p class="text-gray-600 mb-4">Randevunuz başarıyla oluşturuldu.</p>
+      <button onclick="closePopup()" class="w-full bg-blue-500 text-white py-2 rounded-xl hover:bg-blue-600">Ana Sayfaya Dön</button>
+    </div>
+  </div>
+
+
+<!-- Mesajlar Sayfası -->
+<div id="mesajlar" class="page p-4">
+    <header class="flex justify-between items-center mb-4">
+      <div>
+        <h1 class="text-2xl font-bold">Merhaba!</h1>
+        <p class="text-sm text-gray-600">Lizyum’a Hoşgeldiniz</p>
+      </div>
+      <img src="https://via.placeholder.com/40" alt="User" class="w-10 h-10 rounded-full">
+    </header>
+    <input type="text" placeholder="Aramak istediğiniz Mesajı Yazın" class="w-full p-3 mb-4 rounded-2xl border border-gray-300">
+    <div class="space-y-4">
+      <div class="flex items-center justify-between bg-white p-3 rounded-xl shadow">
+        <div class="flex items-center gap-3">
+          <img src="resimler/woman.webp" class="w-10 h-10 rounded-full">
+          <div>
+            <p class="font-semibold">Lorem Ipsum</p>
+            <p class="text-xs text-gray-500">Lorem ipsum dolor sit amet...</p>
+          </div>
+        </div>
+        <div class="text-xs text-gray-400">7:09 ✓</div>
+      </div>
+      <div class="flex items-center justify-between bg-white p-3 rounded-xl shadow">
+        <div class="flex items-center gap-3">
+          <img src="resimler/images.png" class="w-10 h-10 rounded-full">
+          <div>
+            <p class="font-semibold">Lorem Ipsum</p>
+            <p class="text-xs text-gray-500">Lorem ipsum dolor sit amet...</p>
+          </div>
+        </div>
+        <div class="text-xs text-gray-400">15:35 •</div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Arama Listeleme Sayfası -->
+    <div id="arama" class="page p-4">
+        <header class="flex justify-between items-center mb-4">
+          <div>
+            <h1 class="text-2xl font-bold">Arama</h1>
+            <p class="text-sm text-gray-600">Sonuçlar aşağıda listeleniyor</p>
+          </div>
+        </header>
+        <input type="text" placeholder="Aramak istediğiniz hizmeti yazın" class="w-full p-3 mb-4 rounded-2xl border border-gray-300">
+        <div class="space-y-4">
+          <div class="bg-white p-4 rounded-xl shadow flex items-center justify-between">
+            <div>
+              <p class="font-bold">Şirket Adı Lorem 1</p>
+              <p class="text-xs text-gray-500">4.5 ⭐ | 123 Yorum | 200₺’den başlayan fiyatlar</p>
+            </div>
+            <img src="https://via.placeholder.com/60" class="w-14 h-14 rounded-xl" alt="Şirket görseli">
+          </div>
+          <div class="bg-white p-4 rounded-xl shadow flex items-center justify-between">
+            <div>
+              <p class="font-bold">Şirket Adı Ipsum 2</p>
+              <p class="text-xs text-gray-500">4.2 ⭐ | 98 Yorum | 150₺’den başlayan fiyatlar</p>
+            </div>
+            <img src="https://via.placeholder.com/60" class="w-14 h-14 rounded-xl" alt="Şirket görseli">
+          </div>
+        </div>
+      </div>
+
+     
+
+  <!-- Footer menü (Figma’ya uygun) -->
+  <footer class="fixed bottom-0 left-0 right-0 bg-white shadow p-2 flex justify-around">
+    <button onclick="showPage('anasayfa')"> <i class="fa-solid fa-house-user"></i> Anasayfa</button>
+    <button onclick="showPage('hizmet')"><i class="fa-solid fa-briefcase"></i> Hizmet</button>
+    <button onclick="showPage('kategori')"> <i class="fa-solid fa-star"></i> Kategori</button>
+    <button onclick="showPage('mesajlar')"> <i class="fa-solid fa-message"></i> Mesajlar</button>
+    <button onclick="showPage('ayarlar')"> <i class="fa-solid fa-gear"></i> Ayarlar</button>
+  </footer>
+
+  <script>
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function goToSirketDetay() {
+      showPage('sirketDetay');
+    }
+    function checkEnter(event) {
+      if (event.key === 'Enter') {
+        const searchValue = document.getElementById('aramaInput').value;
+        if (searchValue.trim() !== '') {
+          openAramaListe(searchValue);
+        }
+      } else {
+        document.getElementById('aramaSonuc').classList.remove('hidden');
+      }
+    }
+
+    function openAramaListe(name) {
+      document.getElementById('arananKelime').textContent = name;
+      showPage('aramaListe');
+      document.getElementById('aramaSonuc').classList.add('hidden');
+    }
+
+    function openCompanyDetail(name, desc, yorumlar, rozetler) {
+      document.getElementById('companyName').textContent = name;
+      document.getElementById('companyDesc').textContent = desc;
+      document.getElementById('yorumList').innerHTML = '';
+      yorumlar.forEach(y => {
+        document.getElementById('yorumList').innerHTML += `<li>${y}</li>`;
+      });
+      document.getElementById('rozetList').innerHTML = '';
+      rozetler.forEach(r => {
+        document.getElementById('rozetList').innerHTML += `<li>${r}</li>`;
+      });
+      showPage('sirketDetay');
+    }
+
+
+    function toggleKategoriler() {
+      const kategoriGrid = document.getElementById('kategoriler');
+      const toggleButton = document.getElementById('toggleButton');
+      if (kategoriGrid.classList.contains('max-h-28')) {
+        kategoriGrid.classList.remove('max-h-28');
+        kategoriGrid.classList.add('max-h-full');
+        toggleButton.innerText = 'Daha Az Göster';
+      } else {
+        kategoriGrid.classList.remove('max-h-full');
+        kategoriGrid.classList.add('max-h-28');
+        toggleButton.innerText = 'Tümünü Gör';
+      }
+    }
+
+    function showTab(tab) {
+      document.getElementById('detayIcerik').classList.add('hidden');
+      document.getElementById('yorumlarIcerik').classList.add('hidden');
+      document.getElementById('rozetIcerik').classList.add('hidden');
+
+      document.getElementById(`${tab}Icerik`).classList.remove('hidden');
+
+      document.getElementById('tabBilgi').classList.remove('tab-active');
+      document.getElementById('tabYorumlar').classList.remove('tab-active');
+      document.getElementById('tabRozet').classList.remove('tab-active');
+
+      if(tab === 'bilgi') document.getElementById('tabBilgi').classList.add('tab-active');
+      if(tab === 'yorumlar') document.getElementById('tabYorumlar').classList.add('tab-active');
+      if(tab === 'rozet') document.getElementById('tabRozet').classList.add('tab-active');
+    }
+
+
+    function openPopup() {
+      document.getElementById('popupTebrikler').classList.add('active');
+    }
+
+    function closePopup() {
+      document.getElementById('popupTebrikler').classList.remove('active');
+      showPage('anasayfa');
+    }
+  </script>
+</body>
+</html>
+
+  
+
+
